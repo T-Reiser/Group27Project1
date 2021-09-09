@@ -1,30 +1,18 @@
 <resources>
     <string name="app_name">Group27Project1</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    
-    <!-- Example strings from the textbook -->
-    <string name="question_text">Canberra is the capital of Australia.</string> 
-    <string name="true_button">True</string>
-    <string name="false_button">False</string>
-    
-    <!-- Strings to be used for buttons in homework basketball app -->
+    <!-- Strings to be used for buttons -->
     <string name="three_point">+3 POINTS</string>
     <string name="two_point">+2 POINTS</string>
     <string name="free_throw">FREE THROW</string>
     <string name="reset">RESET</string>
+
+    <!-- Team Score Strings -->
     <string name="teamA">Team A</string>
     <string name="teamB">Team B</string>
-
-    <!-- Temporary Strings until I figure out how to do the score -->
     <string name="teamA_score">[Team A Score]</string>
     <string name="teamB_score">[Team B Score]</string>
+    <string name="default_score">0</string>
     
 </resources>

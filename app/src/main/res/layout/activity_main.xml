@@ -4,75 +4,138 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="vertical">
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/teamA">
+                android:gravity="center"
+                android:text="@string/teamA"
+                android:textSize="32sp">
+
             </TextView>
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/teamA_score"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/teamA_score">
-                <!-- Change to Team A Score -->
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/default_score"
+                android:textSize="96sp">
+
             </TextView>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/threeA_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/three_point">
+
             </Button>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/twoA_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/two_point">
+
             </Button>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/freeA_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/free_throw">
+
             </Button>
+
         </LinearLayout>
+
+        <View
+            android:id="@+id/team_divider"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:background="?android:attr/listDivider" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="vertical">
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/teamB">
+                android:gravity="center"
+                android:text="@string/teamB"
+                android:textSize="32sp">
+
             </TextView>
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/teamB_score"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/teamB_score">
-                <!-- Change to Team A Score -->
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/default_score"
+                android:textSize="96sp">
+
             </TextView>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/threeB_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/three_point">
+
             </Button>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/twoB_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/two_point">
+
             </Button>
+
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/freeB_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:text="@string/free_throw">
+
             </Button>
+
         </LinearLayout>
+
     </LinearLayout>
+
     <Button
+        android:id="@+id/reset_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="32sp"
         android:text="@string/reset" />
+
 </LinearLayout>
