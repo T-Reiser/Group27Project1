@@ -6,6 +6,7 @@
     <string name="three_point">+3 POINTS</string>
     <string name="two_point">+2 POINTS</string>
     <string name="free_throw">FREE THROW</string>
+    <string name="undo">REMOVE 1</string>
     <string name="reset">RESET</string>
 
     <!-- Team Score Strings -->

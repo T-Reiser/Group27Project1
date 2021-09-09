@@ -64,6 +64,14 @@
 
             </Button>
 
+            <Button
+                android:id="@+id/undoA_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/undo">
+            </Button>
+
         </LinearLayout>
 
         <View
@@ -124,6 +132,14 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="@string/free_throw">
+
+            </Button>
+            <Button
+                android:id="@+id/undoB_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/undo">
 
             </Button>
 
