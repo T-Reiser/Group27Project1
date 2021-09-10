@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/default_score"
-                android:textSize="60sp">
+                android:textSize="52sp">
 
             </TextView>
 
@@ -79,8 +79,7 @@
             android:layout_width="8dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?android:attr/listDivider"
-            android:padding="16dp" />
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -104,7 +103,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/default_score"
-                android:textSize="60sp">
+                android:textSize="52sp">
 
             </TextView>
 
@@ -152,6 +151,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/reset"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>
