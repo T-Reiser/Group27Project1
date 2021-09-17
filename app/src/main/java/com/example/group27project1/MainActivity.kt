@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(BasketballViewModel::class.java)
     }
     */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

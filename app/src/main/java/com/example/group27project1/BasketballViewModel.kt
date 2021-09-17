@@ -18,6 +18,9 @@ class BasketballViewModel : ViewModel(){
     var aScore: Int = 0
     var bScore: Int = 0
 
+    //val gameSummary = mutableListOf<Games>()
+
+
     //add methods here
     val getCurrentAScore: Int
         get() = aScore
