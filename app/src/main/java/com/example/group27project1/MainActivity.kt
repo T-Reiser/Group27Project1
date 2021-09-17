@@ -1,16 +1,21 @@
 package com.example.group27project1
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
 private const val aKEY_INDEX = "aindex"
 private const val bKEY_INDEX = "bindex"
+private const val REQUEST_CODE_SAVE = 0
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var threeABtn: Button
     private lateinit var threeBBtn: Button
     private lateinit var resetBtn: Button
+    private lateinit var saveBtn: Button
 
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         teamAScoreTextView = findViewById(R.id.teamA_score)
         teamBScoreTextView = findViewById(R.id.teamB_score)
         resetBtn = findViewById(R.id.reset_btn)
+        saveBtn = findViewById(R.id.save_button)
 
         freeABtn.setOnClickListener {
             bbViewModel.setCurrentAScore(bbViewModel.getCurrentAScore +1)
@@ -107,12 +114,28 @@ class MainActivity : AppCompatActivity() {
             bbViewModel.setCurrentBScore(0)
             updateScores()
         }
+
+        saveBtn.setOnClickListener {
+            // Start saveActivity
+            val intent = SecondActivity.newIntent(this@MainActivity, bbViewModel.getCurrentAScore, bbViewModel.getCurrentBScore)
+            startActivityForResult(intent, REQUEST_CODE_SAVE)
+
+        }
+
         updateScores()
     }
 
     private fun updateScores() {
         teamAScoreTextView.setText(bbViewModel.getCurrentAScore.toString())
         teamBScoreTextView.setText(bbViewModel.getCurrentBScore.toString())
+
+        val messageResId = when {
+            bbViewModel.isScoreSaved -> R.string.scoreSaved
+            else ->  R.string.scoreNotSaved
+        }
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
+
     }
 
     override fun onStart() {
@@ -145,6 +168,17 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
+    }
+
+    override fun onActivityResult(requestCode: Int,  resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_CODE_SAVE) {
+            bbViewModel.isScoreSaved =
+                data?.getBooleanExtra(EXTRA_SCORES_SAVED, false) ?: false
+        }
     }
 
 }

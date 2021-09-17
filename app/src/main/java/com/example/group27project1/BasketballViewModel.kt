@@ -17,6 +17,7 @@ class BasketballViewModel : ViewModel(){
     //store team scores here
     var aScore: Int = 0
     var bScore: Int = 0
+    var isScoreSaved = false
 
     //add methods here
     val getCurrentAScore: Int

@@ -8,6 +8,7 @@
     <string name="free_throw">FREE THROW</string>
     <string name="undo">REMOVE 1</string>
     <string name="reset">RESET</string>
+    <string name="save">SAVE</string>
 
     <!-- Team Score Strings -->
     <string name="teamA">Team A</string>
@@ -15,5 +16,12 @@
     <string name="teamA_score">[Team A Score]</string>
     <string name="teamB_score">[Team B Score]</string>
     <string name="default_score">0</string>
+
+
+
+    <!-- Save Screen Strings -->
+    <string name="back">BACK</string>
+    <string name="scoreSaved"> SCORE HAS BEEN SAVED </string>
+    <string name="scoreNotSaved">SCORE HAS NOT BEEN SAVED</string>
 
 </resources>
