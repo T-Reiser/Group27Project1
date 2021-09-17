@@ -14,6 +14,7 @@ private const val bKEY_INDEX = "bindex"
 
 class MainActivity : AppCompatActivity() {
 
+    /*
     private lateinit var teamAScoreTextView: TextView
     private lateinit var teamBScoreTextView: TextView
     private lateinit var freeABtn: Button
@@ -30,11 +31,21 @@ class MainActivity : AppCompatActivity() {
     private val bbViewModel: BasketballViewModel by lazy {
         ViewModelProviders.of(this).get(BasketballViewModel::class.java)
     }
-
+    */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        if (currentFragment == null) {
+            val fragment = HomeFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
+        }
+        /*
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.aScore = acurrentIndex
         val bcurrentIndex = savedInstanceState?.getInt(bKEY_INDEX, 0) ?: 0
@@ -108,8 +119,10 @@ class MainActivity : AppCompatActivity() {
             updateScores()
         }
         updateScores()
-    }
 
+         */
+    }
+    /*
     private fun updateScores() {
         teamAScoreTextView.setText(bbViewModel.getCurrentAScore.toString())
         teamBScoreTextView.setText(bbViewModel.getCurrentBScore.toString())
@@ -146,5 +159,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
     }
+    */
 
 }
