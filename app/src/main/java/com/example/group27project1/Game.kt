@@ -8,5 +8,6 @@ data class Game(
     var date: Date = Date(),
     var team1: Team = Team(),
     var team2: Team = Team(),
+
 )
 

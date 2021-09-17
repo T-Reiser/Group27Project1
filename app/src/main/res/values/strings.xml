@@ -21,6 +21,7 @@
 
     <!-- Save Screen Strings -->
     <string name="back">BACK</string>
+    <string name="col">:</string>
     <string name="scoreSaved"> SCORE HAS BEEN SAVED </string>
     <string name="scoreNotSaved">SCORE HAS NOT BEEN SAVED</string>
 
