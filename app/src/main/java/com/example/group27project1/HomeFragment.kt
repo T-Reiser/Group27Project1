@@ -1,5 +1,7 @@
 package com.example.group27project1
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders
 private const val TAG = "MainActivity"
 private const val aKEY_INDEX = "aindex"
 private const val bKEY_INDEX = "bindex"
+private const val REQUEST_CODE_SAVE = 0
+
 
 class HomeFragment : Fragment() {
     private lateinit var game: Game
@@ -32,6 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var threeABtn: Button
     private lateinit var threeBBtn: Button
     private lateinit var resetBtn: Button
+    private lateinit var saveBtn: Button
 
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
@@ -72,6 +77,7 @@ class HomeFragment : Fragment() {
         teamAScoreTextView = view.findViewById(R.id.teamA_score)
         teamBScoreTextView = view.findViewById(R.id.teamB_score)
         resetBtn = view.findViewById(R.id.reset_btn)
+        saveBtn = view.findViewById(R.id.save_btn)
 
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.aScore = acurrentIndex
@@ -129,6 +135,13 @@ class HomeFragment : Fragment() {
             bbViewModel.setCurrentBScore(0)
             updateScores()
         }
+
+//        saveBtn.setOnClickListener {
+//            // Start saveActivity
+//            val intent = SecondActivity.newIntent(this@MainActivity, bbViewModel.getCurrentAScore, bbViewModel.getCurrentBScore)
+//            startActivityForResult(intent, REQUEST_CODE_SAVE)
+//
+//        }
         updateScores()
 
 
@@ -167,6 +180,17 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
+    }
+
+    override fun onActivityResult(requestCode: Int,  resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_CODE_SAVE) {
+            bbViewModel.isScoreSaved =
+                data?.getBooleanExtra(EXTRA_SCORES_SAVED, false) ?: false
+        }
     }
 
     override fun onStart() {

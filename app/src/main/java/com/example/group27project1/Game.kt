@@ -6,7 +6,7 @@ data class Game(
     val id: UUID = UUID.randomUUID(),
     var title: String = "",
     var date: Date = Date(),
-    var team1: Team,
-    var team2: Team,
+    var team1: Team = Team(),
+    var team2: Team = Team(),
 )
 
