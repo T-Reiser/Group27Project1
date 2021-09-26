@@ -93,7 +93,7 @@ class GameListFragment : Fragment(){
 
         fun bind(game: Game) {
             this.game = game
-            titleTextView.text = this.game.id.toString()
+            titleTextView.text = this.game.teamAName.toString() + " VS. " + this.game.teamBName.toString()
             dateTextView.text = this.game.date.toString()
 //            solvedImageView.visibility = if (crime.isSolved) {
 //                View.VISIBLE

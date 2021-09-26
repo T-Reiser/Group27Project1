@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity
+@Entity(tableName = MainActivity.TABLE_NAME)
 data class Game(
     @PrimaryKey
     val id: UUID = UUID.randomUUID(),

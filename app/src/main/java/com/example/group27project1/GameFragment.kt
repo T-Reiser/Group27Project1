@@ -52,7 +52,7 @@ class GameFragment : Fragment() {
     }
 
     private fun updateUI() {
-        titleField.setText(game.id.toString())
+        //titleField.setText(game.id.toString())
         //dateButton.text = game.date.toString()
 //        solvedCheckBox.apply {
 //            isChecked = crime.isSolved
@@ -88,7 +88,7 @@ class GameFragment : Fragment() {
                 // This one too
             }
         }
-        titleField.addTextChangedListener(titleWatcher)
+        //titleField.addTextChangedListener(titleWatcher)
 
 //        solvedCheckBox.apply {
 //            setOnCheckedChangeListener { _, isChecked ->

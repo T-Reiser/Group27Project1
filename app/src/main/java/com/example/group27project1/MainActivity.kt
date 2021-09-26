@@ -20,6 +20,9 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(),
     GameListFragment.Callbacks {
 
+    companion object {
+        const val TABLE_NAME: String="table_game"
+    }
 
     private lateinit var saveBtn: Button
 

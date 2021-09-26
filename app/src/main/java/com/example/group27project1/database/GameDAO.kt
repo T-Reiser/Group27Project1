@@ -6,15 +6,16 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.group27project1.Game
+import com.example.group27project1.MainActivity
 import java.util.*
 
 @Dao
 interface GameDAO {
 
-    @Query("SELECT * FROM game")
+    @Query("SELECT * FROM "+ MainActivity.TABLE_NAME)
     fun getGames(): LiveData<List<Game>>
 
-    @Query("SELECT * FROM game WHERE id=(:id)")
+    @Query("SELECT * FROM "+ MainActivity.TABLE_NAME+" WHERE id=(:id)")
     fun getGame(id: UUID): LiveData<Game?>
 
     @Update
