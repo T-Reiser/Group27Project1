@@ -14,10 +14,17 @@ class BasketballViewModel : ViewModel(){
         super.onCleared()
         Log.d(TAG, "ViewModel instance about to be destroyed")
     }
+    private val gameRepository = GameRepository.get()
+    val gameListLiveData = gameRepository.getGames()
+
+
+
+    val curGame = Game()
     //store team scores here
     var aScore: Int = 0
     var bScore: Int = 0
     var isScoreSaved = false
+
 
     //val gameSummary = mutableListOf<Games>()
 
@@ -35,4 +42,9 @@ class BasketballViewModel : ViewModel(){
     fun setCurrentBScore(newScore: Int) {
         bScore = newScore
     }
+    fun addGame(game: Game) {
+        gameRepository.addGame(game)
+    }
+
+
 }

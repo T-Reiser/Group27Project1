@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity(),
         const val TABLE_NAME: String="table_game"
     }
 
-    private lateinit var saveBtn: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,14 +38,6 @@ class MainActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
-
-//        saveBtn = findViewById(R.id.save_btn)
-//        saveBtn.setOnClickListener {
-//            // Start saveActivity
-//            val intent = SecondActivity.newIntent(this@MainActivity, 0, 0)
-//            startActivityForResult(intent, REQUEST_CODE_SAVE)
-//
-//        }
     }
     override fun onGameSelected(gameId: UUID) {
         //Log.d(TAG, "MainActivity.onCrimeSelected: $gameId")

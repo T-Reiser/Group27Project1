@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
@@ -54,6 +55,18 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         teamA = Team()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bbViewModel.gameListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { games ->
+                games?.let {
+                    Log.i(TAG, "Got games ${games.size}")
+                    //updateUI(games)
+                }
+            })
     }
 
     override fun onCreateView(
@@ -136,6 +149,14 @@ class HomeFragment : Fragment() {
             updateScores()
         }
 
+        saveBtn.setOnClickListener {
+            // Start saveActivity
+            bbViewModel.curGame.teamAName =  "AAAAAAAAAAAAAAAA"
+            bbViewModel.curGame.teamBName =  "BBBBBBBBBBBBBBBB"
+            bbViewModel.aScore = 99999
+            bbViewModel.bScore = 0
+            bbViewModel.addGame(bbViewModel.curGame)
+        }
 //        saveBtn.setOnClickListener {
 //            // Start saveActivity
 //            val intent = SecondActivity.newIntent(this@MainActivity, bbViewModel.getCurrentAScore, bbViewModel.getCurrentBScore)

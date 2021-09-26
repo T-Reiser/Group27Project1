@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
@@ -52,11 +53,20 @@ class GameFragment : Fragment() {
     }
 
     private fun updateUI() {
-        //titleField.setText(game.id.toString())
+        titleField.setText(game.teamAName+" VS "+game.teamBName)
         //dateButton.text = game.date.toString()
 //        solvedCheckBox.apply {
 //            isChecked = crime.isSolved
 //            jumpDrawablesToCurrentState()
+//        }
+
+//        dateTextView.text = game.date.toString()
+//        scoreTextView.text = game.teamAScore.toString()+":"+game.teamBScore.toString()
+//        //conditionally switch the image drawable to display winning team logo
+//        if (game.teamAScore > game.teamBScore){
+//            teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teama))
+//        } else {
+//            teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teamb))
 //        }
     }
 
@@ -118,7 +128,9 @@ class GameFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.list_item_game, container, false)
 
-//        titleField = view.findViewById(R.id.crime_title) as EditText
+        //titleField = view.findViewById(R.id.game_title) as EditText
+        //titleField = view.findViewById(R.id.game_date) as EditText
+        //titleField = view.findViewById(R.id.game_score) as EditText
 //        dateButton = view.findViewById(R.id.crime_date) as Button
 //        solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
 //

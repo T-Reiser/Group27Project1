@@ -20,6 +20,7 @@ interface GameDAO {
 
     @Update
     fun updateCrime(game: Game)
+
     @Insert
     fun addCrime(game: Game)
 }

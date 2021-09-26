@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -30,16 +31,9 @@ class GameListFragment : Fragment(){
 
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
-    private val crimeListViewModel: GameListViewModel by lazy {
-        ViewModelProviders.of(this).get(GameListViewModel::class.java)
+    private val gameListViewModel: BasketballViewModel by lazy {
+        ViewModelProviders.of(this).get(BasketballViewModel::class.java)
     }
-
-
-//    companion object {
-//        fun newInstance(): GameListFragment {
-//            return GameListFragment()
-//        }
-//    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,7 +57,7 @@ class GameListFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        crimeListViewModel.gameListLiveData.observe(
+        gameListViewModel.gameListLiveData.observe(
             viewLifecycleOwner,
             Observer { games ->
                 games?.let {
@@ -87,19 +81,22 @@ class GameListFragment : Fragment(){
         private val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         private val scoreTextView: TextView = itemView.findViewById(R.id.game_score)
 
+        var teamLogoImageView: ImageView = itemView.findViewById(R.id.team_logo)
         init {
             itemView.setOnClickListener(this)
         }
 
         fun bind(game: Game) {
             this.game = game
-            titleTextView.text = this.game.teamAName.toString() + " VS. " + this.game.teamBName.toString()
-            dateTextView.text = this.game.date.toString()
-//            solvedImageView.visibility = if (crime.isSolved) {
-//                View.VISIBLE
-//            } else {
-//                View.GONE
-//            }
+            titleTextView.text = game.teamAName+" VS "+game.teamBName
+            dateTextView.text = game.date.toString()
+            scoreTextView.text = game.teamAScore.toString()+":"+game.teamBScore.toString()
+            //conditionally switch the image drawable to display winning team logo
+            if (game.teamAScore > game.teamBScore){
+                teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teama))
+            } else {
+                teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teamb))
+            }
         }
 
         override fun onClick(v: View?) {
@@ -123,13 +120,6 @@ class GameListFragment : Fragment(){
 
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
-//            holder.apply {
-//               // titleTextView.text = game.title.toString()+ "   Team "+game.team1.name.toString()+" VS Team "+game.team2.name.toString()
-//                titleTextView.text = ""
-//                dateTextView.text = game.date.toString()
-//                scoreTextView.text = ""
-//               // scoreTextView.text = game.team1.score.toString()+":"+game.team2.score.toString()
-//            }
             holder.bind(game)
         }
     }
