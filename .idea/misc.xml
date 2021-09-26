@@ -9,10 +9,13 @@
         <entry key="..\:/Users/Treis/AndroidStudioProjects/Group27Project1/app/src/main/res/layout/fragment_game_list.xml" value="0.33177083333333335" />
         <entry key="..\:/Users/Treis/AndroidStudioProjects/Group27Project1/app/src/main/res/layout/fragment_home.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/Treis/AndroidStudioProjects/Group27Project1/app/src/main/res/layout/list_item_game.xml" value="0.33177083333333335" />
+        <entry key="app/src/main/res/drawable/ic_teama.xml" value="1.259375" />
+        <entry key="app/src/main/res/drawable/ic_teamb.xml" value="1.209375" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.24270833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1976843910806175" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.18206521739130435" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.17527173913043478" />
+        <entry key="app/src/main/res/layout/list_item_game.xml" value="0.335" />
       </map>
     </option>
   </component>
