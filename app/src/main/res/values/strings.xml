@@ -9,6 +9,7 @@
     <string name="undo">REMOVE 1</string>
     <string name="reset">RESET</string>
     <string name="save">SAVE</string>
+    <string name="display">DISPLAY</string>
 
     <!-- Team Score Strings -->
     <string name="teamA">Team A</string>
