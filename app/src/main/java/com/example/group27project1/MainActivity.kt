@@ -10,12 +10,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-
+import java.util.*
 
 
 private const val REQUEST_CODE_SAVE = 0
 
-class MainActivity : AppCompatActivity() {
+private const val TAG = "MainActivity"
+
+class MainActivity : AppCompatActivity(),
+    GameListFragment.Callbacks {
+
 
     private lateinit var saveBtn: Button
 
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         if (currentFragment == null) {
             //val fragment = HomeFragment()
-            val fragment = GameListFragment.newInstance()
+            val fragment = GameListFragment()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container, fragment)
@@ -41,6 +45,15 @@ class MainActivity : AppCompatActivity() {
 //            startActivityForResult(intent, REQUEST_CODE_SAVE)
 //
 //        }
+    }
+    override fun onGameSelected(gameId: UUID) {
+        //Log.d(TAG, "MainActivity.onCrimeSelected: $gameId")
+        val fragment = GameFragment.newInstance(gameId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 

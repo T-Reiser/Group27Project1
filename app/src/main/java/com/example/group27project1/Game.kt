@@ -1,13 +1,20 @@
 package com.example.group27project1
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
+@Entity
 data class Game(
+    @PrimaryKey
     val id: UUID = UUID.randomUUID(),
-    var title: String = "",
+    var teamAName: String = "",
+    var teamBName: String = "",
+    var teamAScore: Int = 0,
+    var teamBScore: Int = 0,
     var date: Date = Date(),
-    var team1: Team = Team(),
-    var team2: Team = Team(),
+
+
 
 )
 
