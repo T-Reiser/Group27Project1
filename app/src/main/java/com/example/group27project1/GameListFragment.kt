@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -55,6 +56,7 @@ class GameListFragment : Fragment(){
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         val scoreTextView: TextView = itemView.findViewById(R.id.game_score)
 
+        var teamLogoImageView: ImageView = itemView.findViewById(R.id.team_logo)
     }
     private inner class GameAdapter(var games: List<Game>)
         : RecyclerView.Adapter<GameHolder>() {
@@ -71,6 +73,13 @@ class GameListFragment : Fragment(){
                 titleTextView.text = game.title.toString()+ "   Team "+game.team1.name.toString()+" VS Team "+game.team2.name.toString()
                 dateTextView.text = game.date.toString()
                 scoreTextView.text = game.team1.score.toString()+":"+game.team2.score.toString()
+                //conditionally switch the image drawable to display winning team logo
+                if (game.team1.score > game.team2.score){
+                    teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teama))
+                } else {
+                    teamLogoImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_teamb))
+                }
+
             }
         }
     }
