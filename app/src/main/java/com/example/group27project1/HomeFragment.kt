@@ -24,8 +24,6 @@ private const val REQUEST_CODE_SAVE = 0
 
 class HomeFragment : Fragment() {
     private lateinit var game: Game
-    private lateinit var teamA: Team
-    private lateinit var teamB: Team
     private lateinit var teamAName: EditText
 
     private lateinit var teamAScoreTextView: TextView
@@ -54,7 +52,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        teamA = Team()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,9 +90,9 @@ class HomeFragment : Fragment() {
         saveBtn = view.findViewById(R.id.save_btn)
 
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
-        bbViewModel.aScore = acurrentIndex
+        bbViewModel.curGame.teamAScore = acurrentIndex
         val bcurrentIndex = savedInstanceState?.getInt(bKEY_INDEX, 0) ?: 0
-        bbViewModel.bScore = bcurrentIndex
+        bbViewModel.curGame.teamBScore = bcurrentIndex
 
 
         //val provider: ViewModelProvider = ViewModelProviders.of(this)
@@ -151,11 +148,17 @@ class HomeFragment : Fragment() {
 
         saveBtn.setOnClickListener {
             // Start saveActivity
-            bbViewModel.curGame.teamAName =  "AAAAAAAAAAAAAAAA"
-            bbViewModel.curGame.teamBName =  "BBBBBBBBBBBBBBBB"
-            bbViewModel.aScore = 99999
-            bbViewModel.bScore = 0
-            bbViewModel.addGame(bbViewModel.curGame)
+            var flag = 0
+            for(i in bbViewModel.gameListLiveData.value!!) {
+                if(i.id == bbViewModel.curGame.id)
+                    flag = 1
+
+            }
+            if (flag == 0)//not in list, add
+                bbViewModel.addGame(bbViewModel.curGame)
+            else//in list, update
+                bbViewModel.updateGame(bbViewModel.curGame)
+
         }
 //        saveBtn.setOnClickListener {
 //            // Start saveActivity
@@ -224,7 +227,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTextChanged(sequence: CharSequence, start: Int, before: Int, count: Int) {
-                teamA.name = sequence.toString()
+                //teamA.name = sequence.toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {

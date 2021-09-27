@@ -21,8 +21,6 @@ class BasketballViewModel : ViewModel(){
 
     val curGame = Game()
     //store team scores here
-    var aScore: Int = 0
-    var bScore: Int = 0
     var isScoreSaved = false
 
 
@@ -31,19 +29,22 @@ class BasketballViewModel : ViewModel(){
 
     //add methods here
     val getCurrentAScore: Int
-        get() = aScore
+        get() = curGame.teamAScore
     val getCurrentBScore: Int
-        get() = bScore
+        get() = curGame.teamBScore
 
     fun setCurrentAScore(newScore: Int) {
-        aScore = newScore
+        curGame.teamAScore = newScore
     }
 
     fun setCurrentBScore(newScore: Int) {
-        bScore = newScore
+        curGame.teamBScore = newScore
     }
     fun addGame(game: Game) {
         gameRepository.addGame(game)
+    }
+    fun updateGame(game: Game) {
+        gameRepository.updateGame(game)
     }
 
 

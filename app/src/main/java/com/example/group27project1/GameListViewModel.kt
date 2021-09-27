@@ -21,5 +21,8 @@ class GameListViewModel : ViewModel(){
     fun addGame(game: Game) {
         gameRepository.addGame(game)
     }
+    fun updateGame(game: Game) {
+        gameRepository.updateGame(game)
+    }
 
 }
