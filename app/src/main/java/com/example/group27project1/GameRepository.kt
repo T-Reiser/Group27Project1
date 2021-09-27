@@ -31,9 +31,9 @@ class GameRepository private constructor(context: Context) {
         }
     }
 
-    fun addGame(crime: Game) {
+    fun addGame(game: Game) {
         executor.execute {
-            gameDao.addCrime(crime)
+            gameDao.addCrime(game)
         }
     }
 

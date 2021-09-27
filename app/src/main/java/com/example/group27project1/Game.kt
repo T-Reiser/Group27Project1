@@ -7,7 +7,7 @@ import java.util.*
 @Entity(tableName = MainActivity.TABLE_NAME)
 data class Game(
     @PrimaryKey
-    val id: UUID = UUID.randomUUID(),
+    var id: UUID = UUID.randomUUID(),
     var teamAName: String = "",
     var teamBName: String = "",
     var teamAScore: Int = 0,

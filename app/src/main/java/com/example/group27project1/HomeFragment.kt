@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import java.util.*
 
 private const val TAG = "MainActivity"
 private const val aKEY_INDEX = "aindex"
@@ -36,6 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var threeBBtn: Button
     private lateinit var resetBtn: Button
     private lateinit var saveBtn: Button
+    private lateinit var dispBtn: Button
 
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
@@ -88,6 +90,7 @@ class HomeFragment : Fragment() {
         teamBScoreTextView = view.findViewById(R.id.teamB_score)
         resetBtn = view.findViewById(R.id.reset_btn)
         saveBtn = view.findViewById(R.id.save_btn)
+        dispBtn = view.findViewById(R.id.display_btn)
 
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.curGame.teamAScore = acurrentIndex
@@ -143,11 +146,29 @@ class HomeFragment : Fragment() {
         resetBtn.setOnClickListener {
             bbViewModel.setCurrentAScore(0)
             bbViewModel.setCurrentBScore(0)
+            bbViewModel.curGame.id = UUID.randomUUID()
             updateScores()
         }
 
         saveBtn.setOnClickListener {
             // Start saveActivity
+            var flag = 0
+            for(i in bbViewModel.gameListLiveData.value!!) {
+                if(i.id == bbViewModel.curGame.id)
+                    flag = 1
+
+            }
+            if (flag == 0)//not in list, add
+                bbViewModel.addGame(bbViewModel.curGame)
+            else//in list, update
+                bbViewModel.updateGame(bbViewModel.curGame)
+
+        }
+
+        dispBtn.setOnClickListener {
+            // Start saveActivity
+            
+
             var flag = 0
             for(i in bbViewModel.gameListLiveData.value!!) {
                 if(i.id == bbViewModel.curGame.id)

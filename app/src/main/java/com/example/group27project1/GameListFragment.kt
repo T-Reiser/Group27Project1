@@ -100,8 +100,7 @@ class GameListFragment : Fragment(){
         }
 
         override fun onClick(v: View?) {
-            Toast.makeText(context, "${game.id} clicked!", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, "${game.id} clicked!", Toast.LENGTH_SHORT).show()
             callbacks?.onGameSelected(game.id)
         }
     }
