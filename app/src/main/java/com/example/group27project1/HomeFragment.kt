@@ -1,6 +1,7 @@
 package com.example.group27project1
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -17,13 +18,29 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 
-private const val TAG = "MainActivity"
+private const val TAG = "HomeFragment"
 private const val aKEY_INDEX = "aindex"
 private const val bKEY_INDEX = "bindex"
 private const val REQUEST_CODE_SAVE = 0
 
 
 class HomeFragment : Fragment() {
+
+    /**
+     * Required interface for hosting activities
+     */
+    interface Callbacks {
+        fun onGameSelected(gameId: UUID)
+        fun onDispSelected(gameId: UUID)
+    }
+
+    private var callbacks: Callbacks? = null
+
+
+    private val bbViewModel: BasketballViewModel by lazy {
+        ViewModelProviders.of(this).get(BasketballViewModel::class.java)
+    }
+
     private lateinit var game: Game
     private lateinit var teamAName: EditText
 
@@ -42,31 +59,14 @@ class HomeFragment : Fragment() {
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
 
-    private val bbViewModel: BasketballViewModel by lazy {
-        ViewModelProviders.of(this).get(BasketballViewModel::class.java)
-    }
 
-    companion object {
-        fun newInstance(): GameListFragment {
-            return GameListFragment()
-        }
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bbViewModel.gameListLiveData.observe(
-            viewLifecycleOwner,
-            Observer { games ->
-                games?.let {
-                    Log.i(TAG, "Got games ${games.size}")
-                    //updateUI(games)
-                }
-            })
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -167,18 +167,19 @@ class HomeFragment : Fragment() {
 
         dispBtn.setOnClickListener {
             // Start saveActivity
-            
 
-            var flag = 0
-            for(i in bbViewModel.gameListLiveData.value!!) {
-                if(i.id == bbViewModel.curGame.id)
-                    flag = 1
 
-            }
-            if (flag == 0)//not in list, add
-                bbViewModel.addGame(bbViewModel.curGame)
-            else//in list, update
-                bbViewModel.updateGame(bbViewModel.curGame)
+//            var flag = 0
+//            for(i in bbViewModel.gameListLiveData.value!!) {
+//                if(i.id == bbViewModel.curGame.id)
+//                    flag = 1
+//
+//            }
+//            if (flag == 0)//not in list, add
+//                bbViewModel.addGame(bbViewModel.curGame)
+//            else//in list, update
+//                bbViewModel.updateGame(bbViewModel.curGame)
+            callbacks?.onDispSelected(bbViewModel.curGame.id)
 
         }
 //        saveBtn.setOnClickListener {
@@ -194,10 +195,31 @@ class HomeFragment : Fragment() {
         //return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bbViewModel.gameListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { games ->
+                games?.let {
+                    Log.i(TAG, "Got games ${games.size}")
+                    //updateUI(games)
+                }
+            })
+    }
 
     private fun updateScores() {
         teamAScoreTextView.setText(bbViewModel.getCurrentAScore.toString())
         teamBScoreTextView.setText(bbViewModel.getCurrentBScore.toString())
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
     }
 
     override fun onResume() {

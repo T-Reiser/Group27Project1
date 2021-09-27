@@ -18,7 +18,7 @@ private const val REQUEST_CODE_SAVE = 0
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity(),
-    GameListFragment.Callbacks {
+    HomeFragment.Callbacks {
 
     companion object {
         const val TABLE_NAME: String="table_game"
@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity(),
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (currentFragment == null) {
-            //val fragment = HomeFragment()
-            val fragment = GameListFragment()
+            val fragment = HomeFragment()
+            //val fragment = GameListFragment()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container, fragment)
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(),
     }
     override fun onGameSelected(gameId: UUID) {
         //Log.d(TAG, "MainActivity.onCrimeSelected: $gameId")
-        val fragment = GameFragment.newInstance(gameId)
+        val fragment = HomeFragment()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -49,6 +49,15 @@ class MainActivity : AppCompatActivity(),
             .commit()
     }
 
+    override fun onDispSelected(gameId: UUID) {
+
+        val fragment = GameListFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
 
 }

@@ -20,14 +20,8 @@ private const val TAG = "GameListFragment"
 
 class GameListFragment : Fragment(){
 
-    /**
-     * Required interface for hosting activities
-     */
-    interface Callbacks {
-        fun onGameSelected(gameId: UUID)
-    }
 
-    private var callbacks: Callbacks? = null
+    private var callbacks: HomeFragment.Callbacks? = null
 
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
@@ -37,7 +31,7 @@ class GameListFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as Callbacks?
+        callbacks = context as HomeFragment.Callbacks?
     }
 
     override fun onCreateView(
