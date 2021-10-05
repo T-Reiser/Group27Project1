@@ -1,27 +1,47 @@
 package com.example.group27project1
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.group27project1.api.WeatherResponse
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.*
+import java.io.File
 import java.util.*
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationServices
+
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.tasks.Task
+
 
 private const val TAG = "HomeFragment"
 private const val aKEY_INDEX = "aindex"
 private const val bKEY_INDEX = "bindex"
 private const val REQUEST_CODE_SAVE = 0
+private const val REQUEST_PHOTO = 2
+
 
 
 class HomeFragment : Fragment() {
@@ -36,12 +56,21 @@ class HomeFragment : Fragment() {
 
     private var callbacks: Callbacks? = null
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val bbViewModel: BasketballViewModel by lazy {
         ViewModelProviders.of(this).get(BasketballViewModel::class.java)
     }
 
+    //private val CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
+    //private var mGoogleApiClient: GoogleApiClient? = null
+    //private var mLocationRequest: LocationRequest? = null
+    private var currentLatitude = 0.0
+    private var currentLongitude = 0.0
+
     private lateinit var game: Game
+    private lateinit var photoFile: File
+    private lateinit var photoUri: Uri
     private lateinit var teamAName: EditText
 
     private lateinit var teamAScoreTextView: TextView
@@ -59,13 +88,71 @@ class HomeFragment : Fragment() {
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
 
+    private lateinit var photoButton: ImageButton
+    private lateinit var photoView: ImageView
+
+    private lateinit var gameWeatherTextView: TextView
+
+    private lateinit var locationCallback: LocationCallback
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        game = Game()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        //val gaeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        //crimeDetailViewModel.loadCrime(crimeId)
+
+        //val flickrLiveData: LiveData<String> = WeatherFetchr().fetchPhotos()
+        val flickrLiveData: MutableLiveData<WeatherResponse> = WeatherFetchr().fetchPhotos(currentLatitude, currentLongitude)
+
+        getLastKnownLocation()
+        flickrLiveData.observe(
+            this,
+            Observer { weatherItems ->
+                Log.d(TAG, "Response received: $weatherItems")
+                Log.d(TAG, currentLatitude.toString())
+                Log.d(TAG, currentLongitude.toString())
+                gameWeatherTextView.setText( "The weather in " + weatherItems.city.name + " is " + weatherItems.list[1].weItems.temp + "C @ " + weatherItems.list[1].dt_txt)
+            })
+
     }
 
+
+    fun getLastKnownLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location->
+                if (location != null) {
+                    currentLatitude = location.latitude
+                    currentLongitude = location.longitude
+                    Log.d(TAG, currentLatitude.toString())
+                    Log.d(TAG, currentLongitude.toString())
+                    // use your location object
+                    // get latitude , longitude and other info from this
+                }
+
+            }
+
+    }
 
 
     override fun onCreateView(
@@ -92,11 +179,16 @@ class HomeFragment : Fragment() {
         saveBtn = view.findViewById(R.id.save_btn)
         dispBtn = view.findViewById(R.id.display_btn)
 
+        photoButton = view.findViewById(R.id.teamA_camera) as ImageButton
+        photoView = view.findViewById(R.id.teamA_photo) as ImageView
+
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.curGame.teamAScore = acurrentIndex
         val bcurrentIndex = savedInstanceState?.getInt(bKEY_INDEX, 0) ?: 0
         bbViewModel.curGame.teamBScore = bcurrentIndex
 
+
+        gameWeatherTextView = view.findViewById(R.id.game_weather)
 
         //val provider: ViewModelProvider = ViewModelProviders.of(this)
         //val bbViewModel = provider.get(BasketballViewModel::class.java)
@@ -202,7 +294,17 @@ class HomeFragment : Fragment() {
             Observer { games ->
                 games?.let {
                     Log.i(TAG, "Got games ${games.size}")
+                    this.game = games.get(1)
+                    photoFile = bbViewModel.getPhotoFile(game)
+                    photoUri = FileProvider.getUriForFile(requireActivity(),
+                        "com.example.group27project1.fileprovider",
+                        photoFile)
+
                     //updateUI(games)
+                    updatePhotoView()
+
+                    gameWeatherTextView.setText("1")
+
                 }
             })
     }
@@ -210,6 +312,7 @@ class HomeFragment : Fragment() {
     private fun updateScores() {
         teamAScoreTextView.setText(bbViewModel.getCurrentAScore.toString())
         teamBScoreTextView.setText(bbViewModel.getCurrentBScore.toString())
+
     }
 
     override fun onAttach(context: Context) {
@@ -222,9 +325,28 @@ class HomeFragment : Fragment() {
         callbacks = null
     }
 
+    @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
 
+//        mGoogleApiClient?.connect();
+//
+//        val location: Location? =
+//            LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+//        Log.d(TAG, currentLatitude.toString())
+//        if (location == null) {
+//            // apparently it doesnt work in emulator LOL
+//            currentLatitude = 42.2743
+//            currentLongitude = -71.8081
+//        } else {
+//            //If everything went fine lets get latitude and longitude
+//            currentLatitude = location.getLatitude()
+//            currentLongitude = location.getLongitude()
+//            Log.d(TAG, currentLatitude.toString())
+//            Log.d(TAG, currentLongitude.toString())
+//
+//            //Toast.makeText(this, "$currentLatitude WORKS $currentLongitude", Toast.LENGTH_LONG).show()
+//        }
     }
 
     override fun onPause() {
@@ -249,6 +371,16 @@ class HomeFragment : Fragment() {
         Log.d(TAG, "onDestroy() called")
     }
 
+    private fun updatePhotoView() {
+        if (photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoView.setImageBitmap(bitmap)
+        } else {
+            photoView.setImageDrawable(null)
+        }
+    }
+
+
     override fun onActivityResult(requestCode: Int,  resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
@@ -257,6 +389,10 @@ class HomeFragment : Fragment() {
         if (requestCode == REQUEST_CODE_SAVE) {
             bbViewModel.isScoreSaved =
                 data?.getBooleanExtra(EXTRA_SCORES_SAVED, false) ?: false
+        }
+
+        if (requestCode == REQUEST_PHOTO) {
+            updatePhotoView()
         }
     }
 
@@ -277,7 +413,39 @@ class HomeFragment : Fragment() {
                 TODO("Not yet implemented")
             }
         }
+
+        photoButton.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(captureImage,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                val cameraActivities: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO)
+            }
+        }
+
     }
+
+    companion object {
+        fun newInstance(): HomeFragment {
+            return HomeFragment()
+        }
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.group27project1.database.GameDatabase
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -20,6 +21,8 @@ class GameRepository private constructor(context: Context) {
 
     private val gameDao = database.gameDao()
     private val executor = Executors.newSingleThreadExecutor()
+    private val filesDir = context.applicationContext.filesDir
+
 
     fun getGames(): LiveData<List<Game>> = gameDao.getGames()
 
@@ -36,6 +39,9 @@ class GameRepository private constructor(context: Context) {
             gameDao.addCrime(game)
         }
     }
+
+    fun getPhotoFile(game: Game): File = File(filesDir, game.photoFileName)
+
 
     companion object {
         private var INSTANCE: GameRepository? = null

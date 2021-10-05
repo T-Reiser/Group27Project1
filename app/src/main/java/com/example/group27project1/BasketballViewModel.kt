@@ -2,6 +2,7 @@ package com.example.group27project1
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import java.io.File
 
 private const val TAG = "BasketballViewModel"
 
@@ -45,6 +46,9 @@ class BasketballViewModel : ViewModel(){
     }
     fun updateGame(game: Game) {
         gameRepository.updateGame(game)
+    }
+    fun getPhotoFile(game: Game): File {
+        return gameRepository.getPhotoFile(game)
     }
 
 

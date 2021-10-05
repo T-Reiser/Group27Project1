@@ -13,8 +13,8 @@ data class Game(
     var teamAScore: Int = 0,
     var teamBScore: Int = 0,
     var date: Date = Date(),
-
-
-
-)
+    ){
+    val photoFileName
+        get() = "IMG_$id.jpg"
+}
 
