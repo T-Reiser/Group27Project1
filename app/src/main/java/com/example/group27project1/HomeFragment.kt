@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -59,7 +60,11 @@ class HomeFragment : Fragment() {
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
 
-
+    //NEW for Project 3
+    private lateinit var teamAPhotoView: ImageView
+    private lateinit var teamAPhotoBtn: Button
+    private lateinit var teamBPhotoView: ImageView
+    private lateinit var teamBPhotoBtn: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +96,13 @@ class HomeFragment : Fragment() {
         resetBtn = view.findViewById(R.id.reset_btn)
         saveBtn = view.findViewById(R.id.save_btn)
         dispBtn = view.findViewById(R.id.display_btn)
+
+        //NEW Project 3
+        teamAPhotoView = view.findViewById(R.id.teamA_photo)
+        teamAPhotoBtn = view.findViewById(R.id.teamA_camera_btn)
+        teamBPhotoView = view.findViewById(R.id.teamB_photo)
+        teamBPhotoBtn = view.findViewById(R.id.teamB_camera_btn)
+
 
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.curGame.teamAScore = acurrentIndex

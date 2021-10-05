@@ -26,7 +26,7 @@
                 android:scaleType="centerInside" />
 
             <ImageButton
-                android:id="@+id/teamA_camera"
+                android:id="@+id/teamA_camera_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_camera"/>
@@ -108,7 +108,7 @@
                 android:scaleType="centerInside" />
 
             <ImageButton
-                android:id="@+id/teamB_camera"
+                android:id="@+id/teamB_camera_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_camera"/>
