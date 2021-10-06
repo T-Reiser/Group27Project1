@@ -65,12 +65,14 @@ class HomeFragment : Fragment() {
     //private val CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
     //private var mGoogleApiClient: GoogleApiClient? = null
     //private var mLocationRequest: LocationRequest? = null
-    private var currentLatitude = 0.0
-    private var currentLongitude = 0.0
+    private var currentLatitude = 42.2743 //"&lat=42.2743&lon=-71.8081"
+    private var currentLongitude = -71.8081
 
     private lateinit var game: Game
-    private lateinit var photoFile: File
-    private lateinit var photoUri: Uri
+    private lateinit var photoAFile: File
+    private lateinit var photoBFile: File
+    private lateinit var photoAUri: Uri
+    private lateinit var photoBUri: Uri
     private lateinit var teamAName: EditText
 
     private lateinit var teamAScoreTextView: TextView
@@ -88,19 +90,18 @@ class HomeFragment : Fragment() {
     private lateinit var  rem1ABtn: Button
     private lateinit var rem1BBtn: Button
 
-    private lateinit var photoButton: ImageButton
-    private lateinit var photoView: ImageView
+    private lateinit var photoAButton: ImageButton
+    private lateinit var photoAView: ImageView
+
+    private lateinit var photoBButton: ImageButton
+    private lateinit var photoBView: ImageView
 
     private lateinit var gameWeatherTextView: TextView
-
-    private lateinit var locationCallback: LocationCallback
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         game = Game()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
         //val gaeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
         //crimeDetailViewModel.loadCrime(crimeId)
 
@@ -119,16 +120,9 @@ class HomeFragment : Fragment() {
 
     }
 
-
     fun getLastKnownLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this.requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this.requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (this.activity?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION ) } != PackageManager.PERMISSION_GRANTED &&
+            this.activity?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -136,9 +130,10 @@ class HomeFragment : Fragment() {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-
+            Log.d(TAG, "Permissions not working")
             return
         }
+
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location->
                 if (location != null) {
@@ -179,8 +174,10 @@ class HomeFragment : Fragment() {
         saveBtn = view.findViewById(R.id.save_btn)
         dispBtn = view.findViewById(R.id.display_btn)
 
-        photoButton = view.findViewById(R.id.teamA_camera) as ImageButton
-        photoView = view.findViewById(R.id.teamA_photo) as ImageView
+        photoAButton = view.findViewById(R.id.teamA_camera) as ImageButton
+        photoAView = view.findViewById(R.id.teamA_photo) as ImageView
+        photoBButton = view.findViewById(R.id.teamB_camera) as ImageButton
+        photoBView = view.findViewById(R.id.teamB_photo) as ImageView
 
         val acurrentIndex = savedInstanceState?.getInt(aKEY_INDEX, 0) ?: 0
         bbViewModel.curGame.teamAScore = acurrentIndex
@@ -295,10 +292,17 @@ class HomeFragment : Fragment() {
                 games?.let {
                     Log.i(TAG, "Got games ${games.size}")
                     this.game = games.get(1)
-                    photoFile = bbViewModel.getPhotoFile(game)
-                    photoUri = FileProvider.getUriForFile(requireActivity(),
+
+                    photoAFile = bbViewModel.getPhotoFile(game)
+                    photoAUri = FileProvider.getUriForFile(requireActivity(),
                         "com.example.group27project1.fileprovider",
-                        photoFile)
+                        photoAFile)
+
+                    this.game = games.get(2)
+                    photoBFile = bbViewModel.getPhotoFile(game)
+                    photoBUri = FileProvider.getUriForFile(requireActivity(),
+                        "com.example.group27project1.fileprovider",
+                        photoBFile)
 
                     //updateUI(games)
                     updatePhotoView()
@@ -372,11 +376,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun updatePhotoView() {
-        if (photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            photoView.setImageBitmap(bitmap)
+        if (photoAFile.exists()) {
+            val bitmap = getScaledBitmap(photoAFile.path, requireActivity())
+            photoAView.setImageBitmap(bitmap)
+
         } else {
-            photoView.setImageDrawable(null)
+            photoAView.setImageDrawable(null)
+
+        }
+        if (photoBFile.exists()) {
+            val bitmap = getScaledBitmap(photoBFile.path, requireActivity())
+
+            photoBView.setImageBitmap(bitmap)
+        } else {
+
+            photoBView.setImageDrawable(null)
         }
     }
 
@@ -414,7 +428,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        photoButton.apply {
+        photoAButton.apply {
             val packageManager: PackageManager = requireActivity().packageManager
             val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val resolvedActivity: ResolveInfo? =
@@ -424,14 +438,38 @@ class HomeFragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoAUri)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
                         PackageManager.MATCH_DEFAULT_ONLY)
                 for (cameraActivity in cameraActivities) {
                     requireActivity().grantUriPermission(
                         cameraActivity.activityInfo.packageName,
-                        photoUri,
+                        photoAUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO)
+            }
+        }
+
+        photoBButton.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(captureImage,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoBUri)
+                val cameraActivities: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoBUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 }
                 startActivityForResult(captureImage, REQUEST_PHOTO)
