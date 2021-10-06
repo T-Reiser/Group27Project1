@@ -39,11 +39,12 @@
                 android:scaleType="centerInside"
                 android:cropToPadding="true"
                 android:background="@android:color/darker_gray"/>
+
             <ImageButton
                 android:id="@+id/teamA_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_camera"/>
+                android:src="@drawable/ic_camera_button" />
 
             <TextView
                 android:id="@+id/teamA_score"
@@ -120,11 +121,12 @@
                 android:scaleType="centerInside"
                 android:cropToPadding="true"
                 android:background="@android:color/darker_gray"/>
+
             <ImageButton
                 android:id="@+id/teamB_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_camera"/>
+                android:src="@drawable/ic_camera_button" />
 
             <TextView
                 android:id="@+id/teamB_score"
@@ -176,25 +178,38 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/reset_btn"
-        android:layout_width="130dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/reset" />
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/save_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/save" />
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/save"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/display_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/display" />
+        <Button
+            android:id="@+id/display_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/display"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/reset_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/reset"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </LinearLayout>
